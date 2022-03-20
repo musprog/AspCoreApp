@@ -1,0 +1,77 @@
+﻿@using AspCoreApp.Models
+@using AspCoreApp.Services
+@using AspCoreApp.Components
+@using Microsoft.AspNetCore.Components.Web
+@inject EmployeeService eService
+
+<h3>EmployeeList</h3>
+
+<div class="card-columns">
+    @foreach (var employee in eService.GetEmployees())
+    {
+    <div class="card">
+        <div class="card-img">
+            <img src="@employee.Image" width="350" height="475"/>
+        </div>
+        
+        <div class="card-body">
+            <h5 class="card-title">@employee.FirstName</h5>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">
+                <button @onclick="(e => SelectEmployee(employee?.Id.ToString()))"
+                        data-toggle="modal" data-target="#employeeModal" class="btn btn-primary">
+                    More Info
+                </button>
+            </small>
+        </div>
+    </div>
+    }
+</div>
+
+
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        @if (selectedEmployee != null)
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeName">@selectedEmployee.FirstName</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="@selectedEmployee.Image" width="350" height="475" />
+
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@selectedEmployee.Skills</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+@code
+{
+    Employee selectedEmployee;
+    string selectedEmployeeId;
+
+    void SelectEmployee(string employeeId)
+    {
+        selectedEmployeeId = employeeId;
+        selectedEmployee = eService.GetEmployees().First(x => x.Id.ToString() == employeeId);
+    }
+
+}
+
+

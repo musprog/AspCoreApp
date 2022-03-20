@@ -1,0 +1,13 @@
+﻿@page
+@using AspCoreApp.Components
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+    @(await Html.RenderComponentAsync<EmployeeList>(RenderMode.ServerPrerendered))
+
+
+
+<script src="_framework/blazor.server.js"></script>
